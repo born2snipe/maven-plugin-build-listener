@@ -16,7 +16,7 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
 ```
   - Now implement the TimerListener interface
 
-  - For the plugin to discover your listener you need to use the [@ServiceProvider](http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/org/openide/util/lookup/ServiceProvider.html) annotation
+  - For the plugin to discover your listener you need to annotate your TimerListener implementation with the [@ServiceProvider](http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/org/openide/util/lookup/ServiceProvider.html) annotation
 
 ## How do I add a listener to the plugin?
 
