@@ -5,7 +5,7 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
 ## How do I implement a listener?
 
    - Create a new maven module and add the plugin's jar as a dependency
-
+```xml
     <depenendcy>
         <groupId>b2s</groupId>
         <artifactId>maven-plugin-build-time</artifactId>
@@ -13,7 +13,7 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
         <type>jar</type>
         <scope>provided</scope>
     </depenendcy>
-
+```
   - Now implement the TimerListener interface
 
   - For the plugin to discover your listener you need to use the [@ServiceProvider](http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/org/openide/util/lookup/ServiceProvider.html) annotation
@@ -22,6 +22,7 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
 
    All you need to do is add the module that contains the listener as a dependency to the plugin
 
+```xml
    <plugin>
         <groupId>b2s</groupId>
         <artifactId>maven-plugin-build-time</artifactId>
@@ -34,4 +35,4 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
           </dependency>
         </dependencies>
     </plugin>
-
+```
