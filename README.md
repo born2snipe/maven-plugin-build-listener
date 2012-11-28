@@ -36,3 +36,30 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
         </dependencies>
     </plugin>
 ```
+
+## How do I pass arguments to my listener?
+
+    All you need to do is define `<listenerProperties>` in the plugins `<configuration>`
+
+```xml
+   <plugin>
+        <groupId>b2s</groupId>
+        <artifactId>maven-plugin-build-time</artifactId>
+        <version>X.X.X</version>
+        <configuration>
+        <listenerProperties>
+            <listenerProperty>
+                <name>key1</name>
+                <value>value1</value>
+            </listenerProperty>
+        </listenerProperties>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>custom-listener</groupId>
+            <artifactId>custom-listener</artifactId>
+            <version>Y.Y.Y</version>
+          </dependency>
+        </dependencies>
+    </plugin>
+```
