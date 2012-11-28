@@ -6,13 +6,13 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
 
    - Create a new maven module and add the plugin's jar as a dependency
 ```xml
-    <depenendcy>
+    <dependency>
         <groupId>b2s</groupId>
         <artifactId>maven-plugin-build-time</artifactId>
         <version>X.X.X</version>
         <type>jar</type>
         <scope>provided</scope>
-    </depenendcy>
+    </dependency>
 ```
   - Now implement the TimerListener interface
 
