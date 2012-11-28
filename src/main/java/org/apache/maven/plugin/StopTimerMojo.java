@@ -24,6 +24,12 @@ import java.util.Collection;
  * @goal stop
  */
 public class StopTimerMojo extends AbstractMojo {
+    /**
+     * The properties to be passed on to the listeners
+     *
+     * @parameter
+     */
+    private ListenerProperty[] listenerProperties = new ListenerProperty[0];
     private StopWatchProvider stopWatchProvider = new StopWatchProvider();
     private Lookup lookup = Lookup.getDefault();
     private ListenerContextFactory listenerContextFactory = new ListenerContextFactory();
@@ -39,9 +45,13 @@ public class StopTimerMojo extends AbstractMojo {
         }
 
         MavenProject project = (MavenProject) getPluginContext().get("project");
-        ListenerContext listenerContext = listenerContextFactory.build(stopWatch.getElapsedTime(), project, getLog());
+        ListenerContext listenerContext = listenerContextFactory.build(stopWatch.getElapsedTime(), project, getLog(), listenerProperties);
         for (TimerListener buildTimeListener : buildTimeListeners) {
             buildTimeListener.onStop(listenerContext);
         }
+    }
+
+    public void setListenerProperties(ListenerProperty[] listenerProperties) {
+        this.listenerProperties = listenerProperties;
     }
 }

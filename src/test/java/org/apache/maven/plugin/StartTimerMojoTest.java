@@ -47,14 +47,17 @@ public class StartTimerMojoTest {
     @Mock
     private Log log;
     private MavenProject project;
+    private ListenerProperty[] listenerProperties;
 
     @Before
     public void setUp() throws Exception {
+        listenerProperties = new ListenerProperty[0];
         project = new MavenProject();
         HashMap pluginContext = new HashMap();
         pluginContext.put("project", project);
 
         mojo.setPluginContext(pluginContext);
+        mojo.setListenerProperties(listenerProperties);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class StartTimerMojoTest {
 
         when(stopWatchProvider.get()).thenReturn(stopWatch);
         when(lookup.lookupAll(TimerListener.class)).thenReturn(new ArrayList(Arrays.asList(listener)));
-        when(listenerContextFactory.build(0L, project, log)).thenReturn(listenerContext);
+        when(listenerContextFactory.build(0L, project, log, listenerProperties)).thenReturn(listenerContext);
 
         mojo.execute();
 

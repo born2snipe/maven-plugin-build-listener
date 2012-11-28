@@ -18,6 +18,8 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Properties;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -28,12 +30,27 @@ public class ListenerContextFactoryTest {
         MavenProject project = new MavenProject();
 
         ListenerContextFactory factory = new ListenerContextFactory();
+        ListenerProperty[] listenerProperties = new ListenerProperty[2];
+        listenerProperties[0] = property("key1", "value1");
+        listenerProperties[1] = property("key2", "value2");
 
-        ListenerContext context = factory.build(2L, project, log);
+        ListenerContext context = factory.build(2L, project, log, listenerProperties);
 
         assertNotNull(context);
         assertEquals(project, context.getProject());
         assertEquals(log, context.getLog());
         assertEquals(2l, context.getElapsedMillisTime());
+
+        Properties properties = context.getListenerProperties();
+        assertNotNull(properties);
+        assertEquals("value1", properties.get("key1"));
+        assertEquals("value2", properties.get("key2"));
+    }
+
+    private ListenerProperty property(String key, String value) {
+        ListenerProperty property = new ListenerProperty();
+        property.setName(key);
+        property.setValue(value);
+        return property;
     }
 }

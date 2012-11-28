@@ -47,14 +47,18 @@ public class StopTimerMojoTest {
     @InjectMocks
     private StopTimerMojo mojo;
     private MavenProject project;
+    private ListenerProperty[] listenerProperties;
 
     @Before
     public void setUp() throws Exception {
+        listenerProperties = new ListenerProperty[0];
         project = new MavenProject();
         HashMap pluginContext = new HashMap();
         pluginContext.put("project", project);
 
         mojo.setPluginContext(pluginContext);
+        mojo.setListenerProperties(listenerProperties);
+
         when(stopWatchProvider.get()).thenReturn(stopWatch);
     }
 
@@ -64,7 +68,7 @@ public class StopTimerMojoTest {
 
         when(lookup.lookupAll(TimerListener.class)).thenReturn(new ArrayList(Arrays.asList(listener)));
         when(stopWatch.getElapsedTime()).thenReturn(2L);
-        when(listenerContextFactory.build(2L, project, log)).thenReturn(listenerContext);
+        when(listenerContextFactory.build(2L, project, log, listenerProperties)).thenReturn(listenerContext);
 
         mojo.execute();
 

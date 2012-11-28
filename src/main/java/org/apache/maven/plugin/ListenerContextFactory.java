@@ -16,12 +16,22 @@ package org.apache.maven.plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
+import java.util.Properties;
+
 public class ListenerContextFactory {
-    public ListenerContext build(long elapsedTime, MavenProject project, Log log) {
+    public ListenerContext build(long elapsedTime, MavenProject project, Log log, ListenerProperty[] listenerProperties) {
         ListenerContext context = new ListenerContext();
         context.setProject(project);
         context.setLog(log);
         context.setElapsedMillisTime(elapsedTime);
+
+        Properties properties = new Properties();
+        for (ListenerProperty listenerProperty : listenerProperties) {
+            properties.put(listenerProperty.getName(), listenerProperty.getValue());
+        }
+        context.setListenerProperties(properties);
+
         return context;
+
     }
 }

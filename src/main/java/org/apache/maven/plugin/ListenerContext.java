@@ -16,10 +16,13 @@ package org.apache.maven.plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
+import java.util.Properties;
+
 public class ListenerContext {
     private long elapsedMillisTime;
     private MavenProject project;
     private Log log;
+    private Properties listenerProperties = new Properties();
 
     public long getElapsedMillisTime() {
         return elapsedMillisTime;
@@ -43,5 +46,13 @@ public class ListenerContext {
 
     public void setLog(Log log) {
         this.log = log;
+    }
+
+    public Properties getListenerProperties() {
+        return listenerProperties;
+    }
+
+    public void setListenerProperties(Properties listenerProperties) {
+        this.listenerProperties = listenerProperties;
     }
 }

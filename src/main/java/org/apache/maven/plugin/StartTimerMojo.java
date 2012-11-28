@@ -24,6 +24,12 @@ import java.util.Collection;
  * @goal start
  */
 public class StartTimerMojo extends AbstractMojo {
+    /**
+     * The properties to be passed on to the listeners
+     *
+     * @parameter
+     */
+    private ListenerProperty[] listenerProperties = new ListenerProperty[0];
     private ListenerContextFactory listenerContextFactory = new ListenerContextFactory();
     private Lookup lookup = Lookup.getDefault();
     private StopWatchProvider stopWatchProvider = new StopWatchProvider();
@@ -32,7 +38,8 @@ public class StartTimerMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         stopWatchProvider.get().start();
 
-        ListenerContext listenerContext = listenerContextFactory.build(0L, (MavenProject) getPluginContext().get("project"), getLog());
+        MavenProject project = (MavenProject) getPluginContext().get("project");
+        ListenerContext listenerContext = listenerContextFactory.build(0L, project, getLog(), listenerProperties);
 
         Collection<? extends TimerListener> listeners = lookup.lookupAll(TimerListener.class);
         for (TimerListener listener : listeners) {
@@ -40,4 +47,7 @@ public class StartTimerMojo extends AbstractMojo {
         }
     }
 
+    public void setListenerProperties(ListenerProperty[] listenerProperties) {
+        this.listenerProperties = listenerProperties;
+    }
 }
