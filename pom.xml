@@ -13,8 +13,14 @@
         <developerConnection>scm:git:git://github.com/born2snipe/maven-plugin-build-time.git</developerConnection>
     </scm>
 
-
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.4</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
