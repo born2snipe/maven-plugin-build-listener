@@ -13,17 +13,31 @@
  */
 package org.apache.maven.plugin;
 
+import org.apache.maven.project.MavenProject;
+import org.openide.util.Lookup;
+
+import java.util.Collection;
+
 /**
  * Start a stop watch for the project being built
  *
  * @goal start
  */
 public class StartTimerMojo extends AbstractMojo {
+    private ListenerContextFactory listenerContextFactory = new ListenerContextFactory();
+    private Lookup lookup = Lookup.getDefault();
     private StopWatchProvider stopWatchProvider = new StopWatchProvider();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         stopWatchProvider.get().start();
+
+        ListenerContext listenerContext = listenerContextFactory.build(0L, (MavenProject) getPluginContext().get("project"), getLog());
+
+        Collection<? extends TimerListener> listeners = lookup.lookupAll(TimerListener.class);
+        for (TimerListener listener : listeners) {
+            listener.onStart(listenerContext);
+        }
     }
 
 }

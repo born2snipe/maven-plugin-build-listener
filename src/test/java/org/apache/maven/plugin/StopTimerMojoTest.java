@@ -33,6 +33,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class StopTimerMojoTest {
     @Mock
+    private ListenerContextFactory listenerContextFactory;
+    @Mock
     private Log log;
     @Mock
     private Lookup lookup;
@@ -58,13 +60,16 @@ public class StopTimerMojoTest {
 
     @Test
     public void execute_shouldNotifyTheListenersOfTheElapsedTime() throws MojoExecutionException, MojoFailureException {
+        ListenerContext listenerContext = new ListenerContext();
+
         when(lookup.lookupAll(TimerListener.class)).thenReturn(new ArrayList(Arrays.asList(listener)));
         when(stopWatch.getElapsedTime()).thenReturn(2L);
+        when(listenerContextFactory.build(2L, project, log)).thenReturn(listenerContext);
 
         mojo.execute();
 
         verify(stopWatch).stop();
-        verify(listener).onStop(2L, project, log);
+        verify(listener).onStop(listenerContext);
     }
 
     @Test

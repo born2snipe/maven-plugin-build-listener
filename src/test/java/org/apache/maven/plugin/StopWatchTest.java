@@ -13,24 +13,30 @@
  */
 package org.apache.maven.plugin;
 
-public class StopWatch {
-    private long startedAt;
-    private long stoppedAt;
-    private boolean started = false;
+import org.junit.Before;
+import org.junit.Test;
 
-    public void start() {
-        startedAt = System.currentTimeMillis();
-        started = true;
+import static junit.framework.Assert.assertTrue;
+
+public class StopWatchTest {
+    private StopWatch stopWatch;
+
+    @Before
+    public void setUp() throws Exception {
+        stopWatch = new StopWatch();
     }
 
-    public void stop() {
-        if (!started)
-            throw new IllegalStateException("Configuration error: It looks like you forgot to invoke the 'start' goal");
-
-        stoppedAt = System.currentTimeMillis();
+    @Test(expected = IllegalStateException.class)
+    public void stop_shouldBlowUpIfItWasNotStarted() {
+        stopWatch.stop();
     }
 
-    public long getElapsedTime() {
-        return stoppedAt - startedAt;
+    @Test
+    public void stop() throws InterruptedException {
+        stopWatch.start();
+        Thread.sleep(5L);
+        stopWatch.stop();
+
+        assertTrue(stopWatch.getElapsedTime() > 0);
     }
 }

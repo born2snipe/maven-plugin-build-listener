@@ -13,9 +13,8 @@
  */
 package org.apache.maven.plugin;
 
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-
 public interface TimerListener {
-    void onStop(long elapsedMillisTime, MavenProject project, Log log);
+    void onStart(ListenerContext listenerContext);
+
+    void onStop(ListenerContext listenerContext);
 }

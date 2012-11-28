@@ -13,11 +13,19 @@
  */
 package org.apache.maven.plugin;
 
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openide.util.Lookup;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,19 +33,41 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class StartTimerMojoTest {
     @Mock
+    private Lookup lookup;
+    @Mock
     private StopWatchProvider stopWatchProvider;
     @InjectMocks
     private StartTimerMojo mojo;
     @Mock
     private StopWatch stopWatch;
+    @Mock
+    private TimerListener listener;
+    @Mock
+    private ListenerContextFactory listenerContextFactory;
+    @Mock
+    private Log log;
+    private MavenProject project;
 
+    @Before
+    public void setUp() throws Exception {
+        project = new MavenProject();
+        HashMap pluginContext = new HashMap();
+        pluginContext.put("project", project);
+
+        mojo.setPluginContext(pluginContext);
+    }
 
     @Test
     public void execute_shouldStartTheTimerForThisProject() throws MojoExecutionException, MojoFailureException {
+        ListenerContext listenerContext = new ListenerContext();
+
         when(stopWatchProvider.get()).thenReturn(stopWatch);
+        when(lookup.lookupAll(TimerListener.class)).thenReturn(new ArrayList(Arrays.asList(listener)));
+        when(listenerContextFactory.build(0L, project, log)).thenReturn(listenerContext);
 
         mojo.execute();
 
         verify(stopWatch).start();
+        verify(listener).onStart(listenerContext);
     }
 }

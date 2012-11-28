@@ -26,6 +26,7 @@ import java.util.Collection;
 public class StopTimerMojo extends AbstractMojo {
     private StopWatchProvider stopWatchProvider = new StopWatchProvider();
     private Lookup lookup = Lookup.getDefault();
+    private ListenerContextFactory listenerContextFactory = new ListenerContextFactory();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -38,8 +39,9 @@ public class StopTimerMojo extends AbstractMojo {
         }
 
         MavenProject project = (MavenProject) getPluginContext().get("project");
+        ListenerContext listenerContext = listenerContextFactory.build(stopWatch.getElapsedTime(), project, getLog());
         for (TimerListener buildTimeListener : buildTimeListeners) {
-            buildTimeListener.onStop(stopWatch.getElapsedTime(), project, getLog());
+            buildTimeListener.onStop(listenerContext);
         }
     }
 }

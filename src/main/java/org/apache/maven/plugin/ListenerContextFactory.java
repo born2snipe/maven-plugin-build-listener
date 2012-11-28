@@ -13,24 +13,15 @@
  */
 package org.apache.maven.plugin;
 
-public class StopWatch {
-    private long startedAt;
-    private long stoppedAt;
-    private boolean started = false;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 
-    public void start() {
-        startedAt = System.currentTimeMillis();
-        started = true;
-    }
-
-    public void stop() {
-        if (!started)
-            throw new IllegalStateException("Configuration error: It looks like you forgot to invoke the 'start' goal");
-
-        stoppedAt = System.currentTimeMillis();
-    }
-
-    public long getElapsedTime() {
-        return stoppedAt - startedAt;
+public class ListenerContextFactory {
+    public ListenerContext build(long elapsedTime, MavenProject project, Log log) {
+        ListenerContext context = new ListenerContext();
+        context.setProject(project);
+        context.setLog(log);
+        context.setElapsedMillisTime(elapsedTime);
+        return context;
     }
 }
