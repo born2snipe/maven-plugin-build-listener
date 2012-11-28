@@ -30,11 +30,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.netbeans.external</groupId>
-            <artifactId>maven-core-3.0</artifactId>
-            <version>RELEASE70-BETA</version>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.4</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.maven</groupId>

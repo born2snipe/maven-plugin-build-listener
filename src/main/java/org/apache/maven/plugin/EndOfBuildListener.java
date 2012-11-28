@@ -13,25 +13,13 @@
  */
 package org.apache.maven.plugin;
 
+import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
 
 import java.util.Properties;
 
-public class ListenerContextFactory {
-    public ListenerContext build(long elapsedTime, MavenProject project, Log log, ListenerProperty[] listenerProperties) {
-        ListenerContext context = new ListenerContext();
-        context.setProject(project);
-        context.setLog(log);
-        context.setElapsedMillisTime(elapsedTime);
+public interface EndOfBuildListener {
+    void buildSuccessful(ExecutionEvent event, Properties listenerProperties, Log log);
 
-        Properties properties = new Properties();
-        for (ListenerProperty listenerProperty : listenerProperties) {
-            properties.put(listenerProperty.getName(), listenerProperty.getValue());
-        }
-        context.setListenerProperties(properties);
-
-        return context;
-
-    }
+    void buildFailed(ExecutionEvent event, Properties listenerProperties, Log log);
 }
