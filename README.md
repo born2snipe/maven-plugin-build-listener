@@ -39,7 +39,7 @@ This maven plugin provides goals to start/stop a timer, when the timer is stoppe
 
 ## How do I pass arguments to my listener?
 
-    All you need to do is define `<listenerProperties>` in the plugins `<configuration>`
+All you need to do is define `<listenerProperties>` in the plugins `<configuration>`
 
 ```xml
    <plugin>
