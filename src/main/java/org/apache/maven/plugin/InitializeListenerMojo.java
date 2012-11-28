@@ -18,6 +18,8 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -29,6 +31,8 @@ import java.util.Properties;
  */
 
 public class InitializeListenerMojo extends AbstractMojo {
+    private static List<MavenSession> alreadyInitializedSessions = new ArrayList<MavenSession>();
+
     /**
      * @parameter
      */
@@ -42,6 +46,11 @@ public class InitializeListenerMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (alreadyInitializedSessions.contains(session)) {
+            return;
+        }
+        alreadyInitializedSessions.add(session);
+
         MavenExecutionRequest request = session.getRequest();
         ExecutionListener originalListener = request.getExecutionListener();
 
