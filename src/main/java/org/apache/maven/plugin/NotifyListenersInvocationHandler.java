@@ -13,9 +13,9 @@
  */
 package org.apache.maven.plugin;
 
-import org.apache.maven.execution.ExecutionEvent;
-import org.apache.maven.execution.ExecutionListener;
+import org.apache.maven.execution.*;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.openide.util.Lookup;
 
 import java.lang.reflect.InvocationHandler;
@@ -37,27 +37,38 @@ public class NotifyListenersInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (isPassingBuild(method) || isFailingBuild(method)) {
+        if (hasBuildFinished(method)) {
             ExecutionEvent event = (ExecutionEvent) args[0];
-            Collection<? extends EndOfBuildListener> listeners = lookup.lookupAll(EndOfBuildListener.class);
-            for (EndOfBuildListener listener : listeners) {
-                if (isFailingBuild(method)) {
-                    listener.buildFailed(event, listenerProperties, log);
-                } else {
-                    listener.buildSuccessful(event, listenerProperties, log);
-                }
-            }
+            boolean buildFailed = isFailingBuild(event);
+            dispatchToListeners(buildFailed, event);
         }
-
         return method.invoke(originalListener, args);
     }
 
-    private boolean isFailingBuild(Method method) {
-        return method.getName().equals("projectFailed");
+    private boolean hasBuildFinished(Method method) {
+        return method.getName().equals("sessionEnded");
     }
 
-    private boolean isPassingBuild(Method method) {
-        return method.getName().equals("projectSucceeded");
+    private void dispatchToListeners(boolean buildFailed, ExecutionEvent event) {
+        Collection<? extends EndOfBuildListener> listeners = lookup.lookupAll(EndOfBuildListener.class);
+        for (EndOfBuildListener listener : listeners) {
+            if (buildFailed) {
+                listener.buildFailed(event, listenerProperties, log);
+            } else {
+                listener.buildSuccessful(event, listenerProperties, log);
+            }
+        }
+    }
+
+    private boolean isFailingBuild(ExecutionEvent event) {
+        MavenSession session = event.getSession();
+        MavenExecutionResult result = session.getResult();
+        for (MavenProject project : session.getProjects()) {
+            if (result.getBuildSummary(project) instanceof BuildFailure) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setLookup(Lookup lookup) {
