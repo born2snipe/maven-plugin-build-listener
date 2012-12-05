@@ -1,0 +1,27 @@
+<project xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+         xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>b2s</groupId>
+        <artifactId>maven-plugin-build-listener-parent</artifactId>
+        <version>0.2-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>example-listener</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>b2s</groupId>
+            <artifactId>maven-plugin-build-listener-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
+

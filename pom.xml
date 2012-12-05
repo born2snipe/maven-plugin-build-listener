@@ -13,6 +13,8 @@
         <module>parent</module>
         <module>api</module>
         <module>plugin</module>
+        <module>listener</module>
+        <module>usage</module>
     </modules>
 
     <scm>
