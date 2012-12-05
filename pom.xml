@@ -18,7 +18,7 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:git://github.com/born2snipe/maven-plugin-build-listener.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:born2snipe/maven-plugin-build-listener.git</developerConnection>
     </scm>
 
     <build>
