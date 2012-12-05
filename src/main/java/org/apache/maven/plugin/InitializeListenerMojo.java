@@ -19,11 +19,14 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 
 import java.lang.reflect.Proxy;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
  * Hooks up the listeners to notify when the build finishes
  *
+ * @phase initialize
  * @goal initialize
  * @requiresProject
  * @executionStrategy once-per-session
@@ -33,7 +36,7 @@ public class InitializeListenerMojo extends AbstractMojo {
     /**
      * @parameter
      */
-    private ListenerProperty[] listenerProperties = new ListenerProperty[0];
+    private Map listenerProperties = new LinkedHashMap();
 
     /**
      * @parameter expression="${session}"
@@ -63,9 +66,7 @@ public class InitializeListenerMojo extends AbstractMojo {
 
     private Properties convertListenerProperties() {
         Properties properties = new Properties();
-        for (ListenerProperty listenerProperty : listenerProperties) {
-            properties.put(listenerProperty.getName(), listenerProperty.getValue());
-        }
+        properties.putAll(listenerProperties);
         return properties;
     }
 

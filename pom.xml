@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>b2s</groupId>
-    <artifactId>maven-plugin-build-time</artifactId>
+    <artifactId>maven-plugin-build-listener</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
-    <name>maven-plugin-build-time</name>
+    <name>maven-plugin-build-listener</name>
 
 
     <scm>
