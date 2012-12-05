@@ -10,7 +10,7 @@
 
 
     <scm>
-        <developerConnection>scm:git:git://github.com/born2snipe/maven-plugin-build-time.git</developerConnection>
+        <developerConnection>scm:git:git://github.com/born2snipe/maven-plugin-build-listener.git</developerConnection>
     </scm>
 
     <modules>
