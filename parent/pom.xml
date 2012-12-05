@@ -3,7 +3,7 @@
 
     <groupId>b2s</groupId>
     <artifactId>maven-plugin-build-listener-parent</artifactId>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>parent</name>
 

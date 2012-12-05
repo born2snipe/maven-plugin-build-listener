@@ -4,7 +4,7 @@
     <parent>
         <groupId>b2s</groupId>
         <artifactId>maven-plugin-build-listener-parent</artifactId>
-        <version>0.2</version>
+        <version>0.3-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -19,7 +19,7 @@
             <plugin>
                 <groupId>b2s</groupId>
                 <artifactId>maven-plugin-build-listener</artifactId>
-                <version>0.2</version>
+                <version>0.3-SNAPSHOT</version>
                 <dependencies>
                     <dependency>
                         <groupId>b2s</groupId>
