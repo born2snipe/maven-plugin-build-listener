@@ -6,6 +6,7 @@
         <groupId>b2s</groupId>
         <artifactId>maven-plugin-build-listener-parent</artifactId>
         <version>0.2-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>maven-plugin-build-listener-api</artifactId>
