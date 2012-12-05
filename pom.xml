@@ -15,6 +15,22 @@
         <module>plugin</module>
     </modules>
 
+    <scm>
+        <developerConnection>scm:git:git://github.com/born2snipe/maven-plugin-build-listener.git</developerConnection>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.0-beta-8</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
 
