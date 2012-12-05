@@ -1,7 +1,7 @@
-# Maven Build Time Plugin
+# Maven Build Listener Plugin
 
-This maven plugin provides goals to start/stop a timer, when the timer is stopped it notifies listeners of the elapsed time and the project that was built.
+This maven plugin provides access to hook in listeners for a variety of events fired by maven
 
-### [Example Usage](https://github.com/born2snipe/maven-plugin-build-time-example)
+### [Example Usage](https://github.com/born2snipe/maven-plugin-build-listener-example)
 
 
