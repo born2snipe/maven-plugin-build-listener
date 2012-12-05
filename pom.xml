@@ -62,6 +62,19 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.0.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
@@ -114,7 +127,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.0</version>
+                <version>2.0-beta-8</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
@@ -122,6 +135,14 @@
 
 
         </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>
     </build>
 
     <repositories>
@@ -131,6 +152,14 @@
             <url>http://bits.netbeans.org/maven2/</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>b2s-repo</id>
+            <url>svn:https://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
+            <uniqueVersion>true</uniqueVersion>
+        </repository>
+    </distributionManagement>
 
 </project>
 
