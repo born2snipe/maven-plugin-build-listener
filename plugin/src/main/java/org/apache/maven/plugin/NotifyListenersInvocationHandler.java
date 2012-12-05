@@ -15,6 +15,7 @@ package org.apache.maven.plugin;
 
 import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.execution.ExecutionListener;
+import org.apache.maven.plugin.event.api.BuildListener;
 import org.apache.maven.plugin.logging.Log;
 import org.openide.util.Lookup;
 
