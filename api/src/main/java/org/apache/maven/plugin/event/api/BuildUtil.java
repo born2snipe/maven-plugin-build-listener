@@ -13,6 +13,7 @@
  */
 package org.apache.maven.plugin.event.api;
 
+import org.apache.maven.execution.BuildFailure;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
@@ -29,5 +30,19 @@ public class BuildUtil {
             total += result.getBuildSummary(mavenProject).getTime();
         }
         return total;
+    }
+
+    public static boolean isSuccessful(MavenSession session) {
+        MavenExecutionResult result = session.getResult();
+        for (MavenProject project : session.getProjects()) {
+            if (result.getBuildSummary(project) instanceof BuildFailure) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isFailure(MavenSession session) {
+        return !isSuccessful(session);
     }
 }
