@@ -11,24 +11,16 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.apache.maven.plugin.event.api;
+package example;
 
-import org.openide.util.Lookup;
+import org.apache.maven.plugin.event.api.BuildListener;
+import org.apache.maven.plugin.event.api.FailedBuildListener;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.util.Collection;
-
-@ServiceProvider(service = BuildListener.class)
-public final class OnlySuccessfulBuildsListener extends AbstractBuildListener {
-    private Lookup lookup = Lookup.getDefault();
-
+@ServiceProvider(service = FailedBuildListener.class)
+public class FailedListener implements FailedBuildListener {
     @Override
-    public void sessionEnded(Event event) {
-        if (BuildUtil.isSuccessful(event.event.getSession())) {
-            Collection<? extends SuccessfulBuildListener> listeners = lookup.lookupAll(SuccessfulBuildListener.class);
-            for (SuccessfulBuildListener listener : listeners) {
-                listener.successfulBuild(event);
-            }
-        }
+    public void failedBuild(BuildListener.Event event) {
+        event.log.info("ONLY FAILED BUILDS");
     }
 }

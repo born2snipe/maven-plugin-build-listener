@@ -28,11 +28,10 @@ import static org.mockito.Mockito.when;
 
 public class MavenSessionBuilder {
     private MavenSession session = mock(MavenSession.class);
-    private final DefaultMavenExecutionResult result;
+    private final DefaultMavenExecutionResult result = new DefaultMavenExecutionResult();
     private List<MavenProject> projects = new ArrayList<MavenProject>();
 
     public MavenSessionBuilder() {
-        result = new DefaultMavenExecutionResult();
         when(session.getResult()).thenReturn(result);
         when(session.getProjects()).thenReturn(projects);
     }

@@ -13,7 +13,6 @@
  */
 package org.apache.maven.plugin.event.api;
 
-import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
@@ -30,55 +29,56 @@ import java.util.Arrays;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OnlySuccessfulBuildsListenerTest {
+public class EndOfBuildsListenerTest {
     @Mock
     private SuccessfulBuildListener successfulBuildListener, otherSuccessfulBuildListener;
+    @Mock
+    private FailedBuildListener failedBuildListener, otherFailedBuildListener;
     @Mock
     private Lookup lookup;
     @Mock
     private MavenSession session;
     @InjectMocks
-    private OnlySuccessfulBuildsListener listener;
-    private MavenSessionBuilder sessionBuilder;
+    private EndOfBuildsListener listener;
     private MavenProject project;
     private MavenProject otherProject;
+    private EventBuilder eventBuilder;
 
     @Before
     public void setUp() throws Exception {
         project = new MavenProject();
         otherProject = new MavenProject();
 
-        sessionBuilder = new MavenSessionBuilder();
-        sessionBuilder.expectProjects(project, otherProject);
+        eventBuilder = new EventBuilder();
+        eventBuilder.expectProjects(project, otherProject);
 
         when(lookup.lookupAll(SuccessfulBuildListener.class)).thenReturn(new ArrayList(Arrays.asList(successfulBuildListener, otherSuccessfulBuildListener)));
+        when(lookup.lookupAll(FailedBuildListener.class)).thenReturn(new ArrayList(Arrays.asList(failedBuildListener, otherFailedBuildListener)));
     }
 
     @Test
     public void sessionEnded_shouldNotNotifyListenersIfAProjectHasFailed() {
-        sessionBuilder.expectToFail(project).expectToPass(otherProject);
+        eventBuilder.expectToFail(project).expectToPass(otherProject);
 
-        BuildListener.Event event = event();
+        BuildListener.Event event = eventBuilder.toEvent();
         listener.sessionEnded(event);
 
         verifyZeroInteractions(successfulBuildListener, otherSuccessfulBuildListener);
+        verify(failedBuildListener).failedBuild(event);
+        verify(otherFailedBuildListener).failedBuild(event);
     }
 
 
     @Test
     public void sessionEnded_shouldNotifyChildrenWhenAllTheProjectsAreSuccessful() {
-        sessionBuilder.expectToPass(project).expectToPass(otherProject);
+        eventBuilder.expectToPass(project, otherProject);
 
-        BuildListener.Event event = event();
+        BuildListener.Event event = eventBuilder.toEvent();
         listener.sessionEnded(event);
 
         verify(successfulBuildListener).successfulBuild(event);
         verify(otherSuccessfulBuildListener).successfulBuild(event);
+        verifyZeroInteractions(failedBuildListener, otherFailedBuildListener);
     }
 
-    private BuildListener.Event event() {
-        ExecutionEvent event = mock(ExecutionEvent.class);
-        when(event.getSession()).thenReturn(sessionBuilder.toSession());
-        return new BuildListener.Event(event, null, null);
-    }
 }
