@@ -1,8 +1,18 @@
+/**
+ *
+ * Copyright to the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
 package org.apache.maven.plugin.event.api;
 
-import org.apache.maven.execution.BuildFailure;
-import org.apache.maven.execution.BuildSuccess;
-import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
@@ -11,69 +21,55 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BuildUtilTest {
     @Mock
     private MavenSession session;
-    private DefaultMavenExecutionResult result;
     private MavenProject project;
     private MavenProject otherProject;
+    private MavenSessionBuilder builder;
 
     @Before
     public void setUp() throws Exception {
-        result = new DefaultMavenExecutionResult();
         project = new MavenProject();
         otherProject = new MavenProject();
 
-        when(session.getResult()).thenReturn(result);
-        when(session.getProjects()).thenReturn(Arrays.asList(project, otherProject));
+        builder = new MavenSessionBuilder();
+        builder.expectProjects(project, otherProject);
     }
 
 
     @Test
     public void isFailure_shouldReturnFalseIfAllProjectsHavePassed() {
-        expectToPass(project);
-        expectToPass(otherProject);
+        builder.expectToPass(project).expectToPass(otherProject);
 
-        assertFalse(BuildUtil.isFailure(session));
+        assertFalse(BuildUtil.isFailure(builder.toSession()));
     }
 
 
     @Test
     public void isFailure_shouldReturnTrueIfAnyProjectHasFailed() {
-        expectToPass(project);
-        expectToFail(otherProject);
+        builder.expectToPass(project).expectToFail(otherProject);
 
-        assertTrue(BuildUtil.isFailure(session));
+        assertTrue(BuildUtil.isFailure(builder.toSession()));
     }
 
     @Test
     public void isSuccessful_shouldReturnFalseWhenAProjectHasFailed() {
-        expectToPass(project);
-        expectToFail(otherProject);
+        builder.expectToPass(project);
+        builder.expectToFail(otherProject);
 
-        assertFalse(BuildUtil.isSuccessful(session));
+        assertFalse(BuildUtil.isSuccessful(builder.toSession()));
     }
 
     @Test
     public void isSuccessful_shouldReturnTrueWhenAllProjectsAreSuccessful() {
-        expectToPass(project);
-        expectToPass(otherProject);
+        builder.expectToPass(project);
+        builder.expectToPass(otherProject);
 
-        assertTrue(BuildUtil.isSuccessful(session));
-    }
-
-    private void expectToPass(MavenProject project) {
-        result.addBuildSummary(new BuildSuccess(project, 0));
-    }
-
-    private void expectToFail(MavenProject project) {
-        result.addBuildSummary(new BuildFailure(project, 0, null));
+        assertTrue(BuildUtil.isSuccessful(builder.toSession()));
     }
 }
