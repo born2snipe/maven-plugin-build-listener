@@ -3,7 +3,7 @@
 
     <groupId>b2s</groupId>
     <artifactId>maven-plugin-build-listener-aggregate</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>aggregate</name>
 
@@ -18,7 +18,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:born2snipe/maven-plugin-build-listener.git</developerConnection>
-        <tag>0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
