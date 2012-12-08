@@ -39,8 +39,57 @@ public class BuildUtilTest {
 
         builder = new MavenSessionBuilder();
         builder.expectProjects(project, otherProject);
+
+        System.getProperties().remove("skipTests");
+        System.getProperties().remove("maven.test.skip");
+        System.getProperties().remove("skipITs");
     }
 
+    @Test
+    public void isFailsafeSkipped_shouldReturnFalseWhenNoMagicFlagsAreProvided() {
+        assertFalse(BuildUtil.isFailsafeSkipped());
+    }
+
+    @Test
+    public void isFailsafeSkipped_shouldReturnTrueWhen_mavenTestSkip_isProvided() {
+        System.setProperty("maven.test.skip", "");
+
+        assertTrue(BuildUtil.isFailsafeSkipped());
+    }
+
+    @Test
+    public void isFailsafeSkipped_shouldReturnTrueWhen_skipITs_isProvided() {
+        System.setProperty("skipITs", "");
+
+        assertTrue(BuildUtil.isFailsafeSkipped());
+    }
+
+    @Test
+    public void isFailsafeSkipped_shouldReturnTrueWhen_skipTests_isProvided() {
+        System.setProperty("skipTests", "");
+
+        assertTrue(BuildUtil.isFailsafeSkipped());
+    }
+
+    @Test
+    public void isSurefireSkipped_shouldReturnFalseWhenNoMagicFlagsAreFound() {
+        assertFalse(BuildUtil.isSurefireSkipped());
+    }
+
+    @Test
+    public void isSurefireSkipped_shouldReturnTrueWhen_mavenTestSkip_isProvided() {
+        System.setProperty("maven.test.skip", "");
+
+        assertTrue(BuildUtil.isSurefireSkipped());
+    }
+
+
+    @Test
+    public void isSurefireSkipped_shouldReturnTrueWhen_skipTests_isProvided() {
+        System.setProperty("skipTests", "");
+
+        assertTrue(BuildUtil.isSurefireSkipped());
+    }
 
     @Test
     public void isFailure_shouldReturnFalseIfAllProjectsHavePassed() {

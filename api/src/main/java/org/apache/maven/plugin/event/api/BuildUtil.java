@@ -18,6 +18,8 @@ import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 
+import java.util.Properties;
+
 public class BuildUtil {
     public static long calculateBuildTimeFor(MavenSession session) {
         return System.currentTimeMillis() - session.getRequest().getStartTime().getTime();
@@ -44,5 +46,16 @@ public class BuildUtil {
 
     public static boolean isFailure(MavenSession session) {
         return !isSuccessful(session);
+    }
+
+    public static boolean isSurefireSkipped() {
+        Properties properties = System.getProperties();
+        return properties.containsKey("skipTests")
+                || properties.containsKey("maven.test.skip");
+    }
+
+    public static boolean isFailsafeSkipped() {
+        return isSurefireSkipped()
+                || System.getProperties().containsKey("skipITs");
     }
 }
